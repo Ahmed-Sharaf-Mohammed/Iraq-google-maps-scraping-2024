@@ -31,3 +31,34 @@ The analysis delivers insights into:
 | Power BI                 | Interactive dashboards (if used) |
 
 ## Project Structure
+project/
+│── sql/ # SQL scripts (data loading + analysis)
+│── notebooks/ # Jupyter notebooks for analysis
+│── data/ # Raw and cleaned datasets
+│── reports/ # Analytical reports and outputs
+│── README.md # Documentation
+
+ر
+## Installation and Usage
+
+### Prerequisites
+- SQL Server 2019 or later  
+- Python 3.8+  
+- Jupyter Notebook  
+
+### Steps
+```bash
+# 1. Clone the repository
+git clone https://github.com/your-username/your-repo.git
+
+# 2. Navigate to the folder
+cd your-repo
+
+# 3. Load the dataset into SQL Server
+# (see sql/data_loading.sql)
+
+# 4. Run analysis queries
+# (see sql/analysis_queries.sql)
+
+# 5. Explore analysis in Jupyter
+jupyter notebook notebooks/
