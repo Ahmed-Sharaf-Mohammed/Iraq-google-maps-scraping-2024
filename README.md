@@ -1,4 +1,4 @@
-# Iraqi Business Intelligence Analysis [Data Story](https://data-story-business-data-zyq5frn.gamma.site/)
+# Iraqi Business Intelligence Analysis ([Data Story](https://data-story-business-data-zyq5frn.gamma.site/))
 
 ## Overview
 This project provides a comprehensive analysis of the Iraqi business environment by studying company data across different governorates.  
