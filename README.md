@@ -39,26 +39,24 @@ project/
 │── README.md # Documentation
 
 ر
+
 ## Installation and Usage
 
 ### Prerequisites
 - SQL Server 2019 or later  
 - Python 3.8+  
-- Jupyter Notebook  
+- Visual Studio (or any IDE supporting Python)
 
 ### Steps
 ```bash
 # 1. Clone the repository
 git clone https://github.com/your-username/your-repo.git
 
-# 2. Navigate to the folder
-cd your-repo
+# 2. Navigate to the project folder
+cd your-repo/PythonApplication1
 
-# 3. Load the dataset into SQL Server
-# (see sql/data_loading.sql)
+# 3. Install dependencies
+pip install -r requirements.txt
 
-# 4. Run analysis queries
-# (see sql/analysis_queries.sql)
-
-# 5. Explore analysis in Jupyter
-jupyter notebook notebooks/
+# 4. Run the analysis script
+python find.py
