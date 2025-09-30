@@ -28,6 +28,6 @@ The analysis delivers insights into:
 | Python                   | Data cleaning and processing     |
 | Pandas & NumPy           | Data manipulation                |
 | Matplotlib / Seaborn     | Visualization and charts         |
-| Power BI / Tableau       | Interactive dashboards (if used) |
+| Power BI                 | Interactive dashboards (if used) |
 
 ## Project Structure
