@@ -1,1 +1,33 @@
-Ahmed
+[![# Iraqi Business Intelligence Analysis](https://img.shields.io/badge/SQL-Server-blue)]([https://www.microsoft.com/sql-server](https://data-story-business-data-zyq5frn.gamma.site/))
+
+## Overview
+This project provides a comprehensive analysis of the Iraqi business environment by studying company data across different governorates.  
+The analysis delivers insights into:
+- Geographic distribution of companies
+- Service quality through customer reviews
+- Market credibility and trust
+- Digital presence of businesses
+- Strategic recommendations for investors and decision-makers
+
+## Objectives
+- Analyze the geographic distribution of businesses in Iraq  
+- Study service quality based on customer ratings  
+- Measure credibility and trust levels in the market  
+- Evaluate the digital presence of Iraqi businesses  
+- Provide data-driven insights for policymakers and entrepreneurs  
+
+## Data Sources
+- **Main source:** [e.g., Google Maps scraping / Government database / CSV dataset]  
+- **Reference data:** Iraqi governorates dataset  
+- **Time period:** [2023–2024]  
+
+## Technologies Used
+| Technology              | Purpose                          |
+|--------------------------|----------------------------------|
+| Microsoft SQL Server     | Data storage and queries         |
+| Python                   | Data cleaning and processing     |
+| Pandas & NumPy           | Data manipulation                |
+| Matplotlib / Seaborn     | Visualization and charts         |
+| Power BI / Tableau       | Interactive dashboards (if used) |
+
+## Project Structure
