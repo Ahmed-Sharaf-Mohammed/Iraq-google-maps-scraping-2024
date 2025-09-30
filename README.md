@@ -59,4 +59,4 @@ cd your-repo/PythonApplication1
 pip install -r requirements.txt
 
 # 4. Run the analysis script
-python find.py
+python PythonApplication1.py
