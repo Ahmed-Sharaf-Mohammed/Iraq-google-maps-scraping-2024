@@ -12,15 +12,6 @@ __pycache__/
 env/
 venv/
 
-# SQL/DB backups
-*.bacpac
-*.mdf
-*.ldf
-
-# Excel/PowerBI large files
-*.xlsx
-*.pbix
-
 # OS
 Thumbs.db
 .DS_Store
