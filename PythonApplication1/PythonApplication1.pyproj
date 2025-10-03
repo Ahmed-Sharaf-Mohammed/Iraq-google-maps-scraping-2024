@@ -1072,6 +1072,7 @@
     <Content Include="integrated and cleaned data\database %28sql server 2022%29\pr1.bacpac" />
     <Content Include="iraq_companies_distribution.html" />
     <Content Include="pythonapplication1.spec" />
+    <Content Include="requirements.txt" />
     <Content Include="SQLQuery2.sql" />
     <Content Include="visualisation\pr1.pbix" />
   </ItemGroup>

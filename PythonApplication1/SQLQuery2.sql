@@ -1,20 +1,18 @@
 ﻿-- 1. What are the most common categories?
 -- Goal: Identify the most dominant sectors in the market.
-SELECT category, COUNT(*) as count
+SELECT category, COUNT(DISTINCT name) as company_count
 FROM NewAll
 GROUP BY category
-ORDER BY count DESC;
-
+ORDER BY company_count DESC;
 
 
 -- 2. Which governorates have the largest number of companies?
 -- Goal: Show where businesses are most concentrated geographically.
-SELECT state_clean, COUNT(*) as company_count
-FROM NewAll
+SELECT state_clean, COUNT(DISTINCT name) as company_count
+FROM NewAll 
 WHERE state_clean != 'غير محدد'
 GROUP BY state_clean
 ORDER BY company_count DESC;
-
 
 
 -- 3. How are companies distributed across governorates and cities?
@@ -26,22 +24,23 @@ GROUP BY state_clean, city
 ORDER BY company_count DESC;
 
 
-
-
 -- 4. What is the average rating for each category?
 -- Goal: Measure customer satisfaction across different sectors.
-SELECT category, AVG(rating) as avg_rating
-FROM NewAll
-WHERE rating IS NOT NULL
+SELECT category, round(AVG(company_avg_rating),2) as avg_company_rating
+FROM (
+    SELECT name, category, AVG(rating) as company_avg_rating
+    FROM NewAll
+    WHERE rating IS NOT NULL
+    GROUP BY name, category
+) company_ratings
 GROUP BY category
-ORDER BY avg_rating DESC;
-
+ORDER BY avg_company_rating DESC;
 
 
 -- 5. What are the top-rated categories in each governorate?
 -- Goal: Highlight which sectors excel in specific regions.
 WITH RankedCategories AS (
-    SELECT state_clean, category, AVG(rating) as avg_rating,
+    SELECT state_clean, category, round(AVG(rating),1) as avg_rating,
            ROW_NUMBER() OVER (PARTITION BY state_clean ORDER BY AVG(rating) DESC) as rank
     FROM NewAll
     WHERE rating IS NOT NULL AND state_clean != 'غير محدد'
@@ -49,23 +48,31 @@ WITH RankedCategories AS (
 )
 SELECT state_clean, category, avg_rating
 FROM RankedCategories
-WHERE rank = 1;
-
-
-
+WHERE rank = 1
+ORDER BY avg_rating DESC;
 
 
 -- 6. Which companies are the highest rated in each governorate (with more than 10 reviews)?
 -- Goal: Find local champions with proven customer feedback.
-WITH RankedCompanies AS (
-    SELECT RecordID, name, state_clean, city, rating, reviews, category,
-           ROW_NUMBER() OVER (PARTITION BY state_clean ORDER BY rating DESC, reviews DESC) as rank
+WITH CompanyAverages AS (
+    SELECT name, state_clean, category,
+           AVG(rating) as avg_rating,
+           COUNT(*) as total_reviews
     FROM NewAll
-    WHERE rating IS NOT NULL AND reviews > 10 AND state_clean != 'غير محدد'
+    WHERE rating IS NOT NULL AND state_clean != 'غير محدد'
+    GROUP BY name, state_clean, category
+    HAVING COUNT(*) >= 10 
+),
+RankedCompanies AS (
+    SELECT name, state_clean, category, avg_rating, total_reviews,
+           ROW_NUMBER() OVER (PARTITION BY state_clean ORDER BY avg_rating DESC, total_reviews DESC) as rank
+    FROM CompanyAverages
 )
-SELECT RecordID, name, state_clean, city, rating, reviews, category
+SELECT name, state_clean, category, avg_rating, total_reviews
 FROM RankedCompanies
-WHERE rank = 1;
+WHERE rank = 1 
+ORDER BY total_reviews DESC;
+
 
 select name, pr1.dbo.[All].[type] from [All]
 where pr1.dbo.[All].RecordID = 364667
@@ -81,9 +88,6 @@ FROM NewAll
 WHERE reviews > 0
 GROUP BY category
 ORDER BY avg_reviews DESC;
-
-
-
 
 
 -- 8. How does the rating change as the number of reviews increases?
@@ -103,25 +107,28 @@ GROUP BY CASE
            WHEN reviews BETWEEN 11 AND 50 THEN '11-50'
            WHEN reviews BETWEEN 51 AND 100 THEN '51-100'
            ELSE '100+'
-         END
-ORDER BY review_range;
-
-
+         END;
+--ORDER BY review_range;
 
 
 -- 9. Which companies have the highest number of reviews in each category?
 -- Goal: Identify the most influential companies within each sector.
-WITH RankedNewAll AS (
-    SELECT name, category, reviews,
-           ROW_NUMBER() OVER (PARTITION BY category ORDER BY reviews DESC) as rank
+WITH CompanyReviewCounts AS (
+    SELECT name, category, 
+           COUNT(*) as total_reviews,
+           round(AVG(rating),2) as avg_rating
     FROM NewAll
     WHERE reviews > 0
+    GROUP BY name, category
+),
+RankedCompanies AS (
+    SELECT name, category, total_reviews, avg_rating,
+           ROW_NUMBER() OVER (PARTITION BY category ORDER BY total_reviews DESC) as rank
+    FROM CompanyReviewCounts
 )
-SELECT name, category, reviews
-FROM RankedNewAll
-WHERE rank = 1;
-
-
+SELECT name, category, total_reviews, avg_rating
+FROM RankedCompanies
+WHERE rank = 1
 
 
 -- 10. What is the percentage of verified companies in each category?
@@ -135,9 +142,6 @@ GROUP BY category
 ORDER BY verification_rate DESC;
 
 
-
-
-
 -- 11. How do verified and non-verified companies compare in terms of reviews and ratings?
 -- Goal: Test whether verification affects reputation.
 SELECT verified,
@@ -147,8 +151,6 @@ SELECT verified,
 FROM NewAll
 WHERE reviews > 0 AND rating IS NOT NULL
 GROUP BY verified;
-
-
 
 
 -- 12. Which companies have both a website and a LinkedIn profile?
@@ -163,7 +165,6 @@ WHERE site IS NOT NULL AND site != 'NOT_PROVIDE'
   AND linkedin IS NOT NULL AND linkedin != 'NOT_PROVIDE'
 GROUP BY category
 ORDER BY percentage_in_category DESC;
-
 
 
 -- 13. What is the percentage of companies with email addresses in each category?
@@ -190,7 +191,6 @@ FROM NewAll n
 WHERE rating = 5 AND reviews < 5
 GROUP BY category
 ORDER BY percentage_in_category DESC;
-
 
 
 -- 15. How are companies distributed by business status (active, closed, etc.)?
